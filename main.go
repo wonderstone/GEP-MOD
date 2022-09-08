@@ -20,7 +20,6 @@ var srTests = []struct {
 	in  []float64
 	out float64
 }{
-
 	// {[]float64{0}, 0},
 	{[]float64{2.81}, 95.2425},
 	{[]float64{6}, 1554},
