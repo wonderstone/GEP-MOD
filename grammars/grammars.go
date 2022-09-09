@@ -17,7 +17,7 @@ import (
 	"github.com/wonderstone/GEP-MOD/functions"
 )
 
-const grammarPath = "GEPX/grammars"
+const grammarPath = "GEP-MOD/grammars"
 
 // Functions is a collection of Functions available in the language grammar.
 type Functions struct {
@@ -305,7 +305,14 @@ func getPath(filename string) string {
 	}
 	// search workdir grammars folder
 	wd, _ := os.Getwd()
-	wdfilename := filepath.Join(wd, "grammars", filename)
+	// get wd parent
+	wd = filepath.Dir(wd)
+	wdfilename := filepath.Join(wd, grammarPath, filename)
+	if _, err := os.Stat(wdfilename); err == nil {
+		return wdfilename
+	}
+	//
+
 	return wdfilename
 }
 

@@ -46,6 +46,8 @@ func (g *Genome) Write(w io.Writer, grammar *grammars.Grammar) {
 }
 
 func (g *Genome) WriteExps(w io.Writer, grammar *grammars.Grammar, indiNames []string) {
+	// fmt.Println("+++++++++++++++++++++++++++")
+	// fmt.Println(grammar, g, indiNames)
 	d := &dump{
 		gr:     grammar,
 		genome: g,
@@ -58,7 +60,9 @@ func (g *Genome) WriteExps(w io.Writer, grammar *grammars.Grammar, indiNames []s
 	for i, n := range indiNames {
 		indiNamesMap[fmt.Sprintf("d[%d]", i)] = n
 	}
-
+	// fmt.Println("************************************")
+	// fmt.Println(indiNamesMap)
+	// fmt.Println(d)
 	exps, err := d.generateExps(indiNamesMap)
 	if err != nil {
 		fmt.Printf("error generating exps: %v", err)
@@ -80,7 +84,8 @@ func (g *Genome) WriteExpsStr(grammar *grammars.Grammar, indiNames []string) (re
 	for i, n := range indiNames {
 		indiNamesMap[fmt.Sprintf("d%d", i)] = n
 	}
-
+	// fmt.Println("************************************")
+	// fmt.Println(d)
 	exps, err := d.generateExps(indiNamesMap)
 	if err != nil {
 		fmt.Printf("error generating exps: %v", err)
@@ -244,7 +249,10 @@ func (d *dump) generateExps(indiNamesMap map[string]string) ([]byte, error) {
 	d.w = &buf
 	// Generate the expression, keeping track of any helper functions that are needed.
 	helpers := make(grammars.HelperMap)
+	// tmp use fmt to output the d
+	fmt.Println(d)
 	s, ok := d.gr.Functions.FuncMap[d.genome.LinkFunc]
+	fmt.Println(s, ok)
 	if !ok {
 		return nil, fmt.Errorf("unable to find grammar linking function: %v", s.Symbol())
 	}
