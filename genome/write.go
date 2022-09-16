@@ -252,7 +252,7 @@ func (d *dump) generateExps(indiNamesMap map[string]string) ([]byte, error) {
 	// tmp use fmt to output the d
 	fmt.Println(d)
 	s, ok := d.gr.Functions.FuncMap[d.genome.LinkFunc]
-	fmt.Println(s, ok)
+	// fmt.Println(s, ok)
 	if !ok {
 		return nil, fmt.Errorf("unable to find grammar linking function: %v", s.Symbol())
 	}
