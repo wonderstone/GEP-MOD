@@ -61,7 +61,9 @@ func (g Genome) String() string {
 	for _, v := range g.Genes {
 		result = append(result, v.String())
 	}
-	return fmt.Sprintf("%v, score=%v", strings.Join(result, "|"+g.LinkFunc+"|"), g.Score)
+	return fmt.Sprintf("%v", strings.Join(result, "|"+g.LinkFunc+"|"))
+
+	// return fmt.Sprintf("%v, score=%v", strings.Join(result, "|"+g.LinkFunc+"|"), g.Score)
 }
 
 // Mutate mutates a genome by performing numMutations random symbol exchanges within the genome.
@@ -74,7 +76,7 @@ func (g *Genome) Mutate(numMutations int) {
 	}
 }
 
-//isTransposition transposes the the IS element(start position) to the target site with the length of no more than gl
+// isTransposition transposes the the IS element(start position) to the target site with the length of no more than gl
 func (g *Genome) IsTransposition(gl int) {
 	// randomly choose the sourceGene
 	sourceGene := rand.Intn(len(g.Genes))
@@ -96,6 +98,10 @@ func (g *Genome) IsTransposition(gl int) {
 		for i := 0; i < isLength; i++ {
 			g.Genes[targetGene].Symbols[startTPosition+i+1] = isElement[i]
 		}
+	}
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
 	}
 }
 
@@ -138,6 +144,10 @@ func (g *Genome) RisTransposition(gl int) {
 			g.Genes[sourceGene].Symbols[i] = head[i-len(risElement)]
 		}
 	}
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
+	}
 }
 
 // GeneTransposition transposes the entire gene funcitons as a whole to the beginning of the chromosome
@@ -153,6 +163,10 @@ func (g *Genome) GeneTransposition() {
 		} else if i <= sourceGene {
 			g.Genes[i] = tmpGenome.Genes[i-1]
 		}
+	}
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
 	}
 }
 
@@ -188,6 +202,12 @@ func (g *Genome) OnePointRecombination(other *Genome) {
 			other.Genes[sourceGene+i+1] = tempGenomeSlice[i]
 		}
 	}
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
+		other.Genes[i].Invalidate()
+	}
+
 }
 
 // the part below  uses different crossover methods（no gene dump process）don't know which one is better
@@ -247,7 +267,11 @@ func (g *Genome) TwoPointRecombination(other *Genome) {
 			}
 		}
 	}
-
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
+		other.Genes[i].Invalidate()
+	}
 }
 
 // GeneRecombination crossover two chromosomes by randomly choosing two genes in the chromosome and swapping the genes between the two chromosomes.
@@ -258,6 +282,11 @@ func (g *Genome) GeneRecombination(other *Genome) {
 	tempGene := g.Genes[genePosition].Dup()
 	g.Genes[genePosition] = other.Genes[genePosition].Dup()
 	other.Genes[genePosition] = tempGene.Dup()
+	// iter the genes to Invalidate!!!! no test
+	for i := 0; i < len(g.Genes); i++ {
+		g.Genes[i].Invalidate()
+		other.Genes[i].Invalidate()
+	}
 }
 
 // Dup duplicates the genome into the provided destination genome.

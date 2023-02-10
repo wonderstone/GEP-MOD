@@ -204,6 +204,14 @@ func (g *Gene) Mutate() {
 	g.vif = nil
 }
 
+// Invalidate the cached function for Gene
+func (g *Gene) Invalidate() {
+	g.bf = nil
+	g.intF = nil
+	g.mf = nil
+	g.vif = nil
+}
+
 // Dup duplicates the gene into the provided destination gene.
 func (g *Gene) Dup() *Gene {
 	if g == nil {
@@ -277,8 +285,9 @@ func CheckEqual(g1 *Gene, g2 *Gene) error {
 // argOrder is used to build up the actual evaluatable expression tree.
 //
 // For example:
-//   '+.*.-./' => [[1, 2], [3, 4], [5, 6], [7, 8]]
-//   '+.d0.c0./' => [[1, 2], nil, nil, [3, 4]]
+//
+//	'+.*.-./' => [[1, 2], [3, 4], [5, 6], [7, 8]]
+//	'+.d0.c0./' => [[1, 2], nil, nil, [3, 4]]
 func (g *Gene) getArgOrder() [][]int {
 	var lookup functions.FuncMap
 	switch g.funcType {

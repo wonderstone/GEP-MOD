@@ -61,7 +61,7 @@ func (g *Generation) Evolve(iterations int, expectFitness float64, pm float64, p
 	for i := 0; i < iterations; i++ {
 
 		bestGenome := g.getBest() // Preserve the best genome
-		fmt.Println("Iteration #", i, bestGenome.Score)
+		// fmt.Println("Iteration #", i, bestGenome.Score)
 		if bestGenome.Score >= expectFitness {
 			fmt.Printf("Stopping after generation #%v\n", i)
 			return bestGenome
@@ -74,32 +74,32 @@ func (g *Generation) Evolve(iterations int, expectFitness float64, pm float64, p
 		} else {
 			g.mutation(pm) // Section 3.3.2, book page 77
 		}
-		if pis <= 0 || pis >= 1 {
+		if pis < 0 || pis >= 1 {
 			panic("pis must be between 0 and 1")
 		} else {
 			g.isTransposition(pis, glis)
 		}
-		if pris <= 0 || pris >= 1 {
+		if pris < 0 || pris >= 1 {
 			panic("pris must be between 0 and 1")
 		} else {
 			g.risTransposition(pris, glris)
 		}
-		if pgene <= 0 || pgene >= 1 {
+		if pgene < 0 || pgene >= 1 {
 			panic("pgene must be between 0 and 1")
 		} else {
 			g.geneTransposition(pgene)
 		}
-		if p1p <= 0 || p1p >= 1 {
+		if p1p < 0 || p1p >= 1 {
 			panic("p1p must be between 0 and 1")
 		} else {
 			g.onePointRecombination(p1p)
 		}
-		if p2p <= 0 || p2p >= 1 {
+		if p2p < 0 || p2p >= 1 {
 			panic("p2p must be between 0 and 1")
 		} else {
 			g.twoPointRecombination(p2p)
 		}
-		if pr <= 0 || pr >= 1 {
+		if pr < 0 || pr >= 1 {
 			panic("pr must be between 0 and 1")
 		} else {
 			g.geneRecombination(pr)
@@ -108,7 +108,7 @@ func (g *Generation) Evolve(iterations int, expectFitness float64, pm float64, p
 		g.Genomes[0] = saveCopy
 		// fmt.Printf("the round right now is #%v, best score is %v\n", i, bestGenome.Score)
 	}
-	fmt.Printf("Stopping after generation #%v\n", iterations)
+	// fmt.Printf("Stopping after generation #%v\n", iterations)
 	return g.getBest()
 }
 
@@ -385,7 +385,7 @@ func (gs *GenerationGS) EvolveGS(iterations int, expectFitness float64, pm float
 		gs.GenomeSets[0] = saveCopy
 		// fmt.Printf("the round right now is #%v, best score is %v\n", i, bestGenome.Score)
 	}
-	fmt.Printf("Stopping after generation #%v\n", iterations)
+	// fmt.Printf("Stopping after generation #%v\n", iterations)
 	return gs.getBest()
 }
 
