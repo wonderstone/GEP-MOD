@@ -135,13 +135,6 @@ func (g *Genome) SimplifyGenome(grammar *grammars.Grammar, indiNames []string) (
 			}
 		}
 	}
-	// if resindiNms is [vol ma1] , then add a breakpoint
-	// if len(indiNmSlice) == 2 && indiNmSlice[0] == "vol" && indiNmSlice[1] == "ma1" {
-	// 	fmt.Println("breakpoint")
-	// }
-	// if len(indiNmSlice) == 2 && indiNmSlice[0] == "close" && indiNmSlice[1] == "ma1" {
-	// 	fmt.Println("breakpoint")
-	// }
 
 	// adjust the g *Genome
 	re4terminals := regexp.MustCompile("d[0-9]+")

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"math"
 	"math/rand"
+	"strings"
 
 	// "os"
 	"time"
@@ -13,7 +14,8 @@ import (
 	"github.com/wonderstone/GEP-MOD/gene"
 	"github.com/wonderstone/GEP-MOD/genome"
 	"github.com/wonderstone/GEP-MOD/genomeset"
-	"github.com/wonderstone/GEP-MOD/grammars"
+
+	// "github.com/wonderstone/GEP-MOD/grammars"
 	"github.com/wonderstone/GEP-MOD/model"
 )
 
@@ -100,38 +102,54 @@ func main() {
 	fmt.Println("=====================================================================================================")
 	// 1. use genome mode to demo
 	numIn := len(srTests[0].in)
-	e := model.New(funcs, functions.Float64, 10, 4, 2, numIn, 0, "+", validateFunc)
-	s := e.Evolve(2000, 50000, 0.8, 0.5, 3, 0.5, 3, 0.5, 0.01, 0.01, 0.01)
+	linkfunc := "Add3"
+	e := model.New(funcs, functions.Float64, 10, 4, 4, numIn, 0, linkfunc, validateFunc)
+	s := e.Evolve(500, 1000, 0.8, 0.5, 3, 0.5, 3, 0.5, 0.01, 0.01, 0.01)
 	tmp := validateFunc(s)
 	fmt.Println("s score:", tmp)
 	// Write out the Go source code for the solution.
-	gr, err := grammars.LoadGoMathGrammar()
-	if err != nil {
-		log.Printf("unable to load grammar: %v", err)
-	}
-	helpers := make(grammars.HelperMap)
+	// gr, err := grammars.LoadGoMathGrammar()
+	// if err != nil {
+	// 	log.Printf("unable to load grammar: %v", err)
+	// }
+	// helpers := make(grammars.HelperMap)
 
 	// this part is the KES for genome, linked by "|"+g.LinkFunc+"|"
 	fmt.Printf("// (a^4 + a^3 + a^2 + a) solution karva expression for Genome:\n// %q \n", s)
-	// this part is the KE for one gene
-	for _, g := range s.Genes {
-		exp, _ := g.Expression(gr, helpers)
-		fmt.Println(exp)
+
+	str4solution := s.String()
+	genestr4solution := strings.Split(str4solution, "|"+linkfunc+"|")
+	fmt.Println("genestr4solution:", genestr4solution)
+	// new a gene slice from genestr4solution
+	var genes4solution []*gene.Gene
+	for _, g := range genestr4solution {
+		genes4solution = append(genes4solution, gene.New(g, functions.Float64))
 	}
+	// new a genome from genes4solution
+	sfromsolution := genome.New(genes4solution, linkfunc)
+	// // this part is the KE for one gene
+	// for _, g := range s.Genes {
+	// 	exp, _ := g.Expression(gr, helpers)
+	// 	fmt.Println(exp)
+	// }
+	fmt.Printf("// (a^4 + a^3 + a^2 + a) rebuild solution karva expression for Genome:\n// %q \n", sfromsolution)
+	fmt.Println("Is the two genome equal: ", sfromsolution.IfEqual(s))
+
+	fmt.Println("the result should be 95.2425, and actual res is  ", sfromsolution.EvalMath([]float64{2.81}))
 	// 打印华丽的分割线
 	fmt.Println("=====================================================================================================")
 	// 2. use genomeset mode to demo
-	es := model.NewGS(funcs, functions.Float64, 50, 4, 2, 2, numIn, 0, "+", validateFuncGS)
-	ss := es.EvolveGS(1000, 50000, 0.8, 0.5, 3, 0.5, 3, 0.5, 0.01, 0.01, 0.01)
+	es := model.NewGS(funcs, functions.Float64, 10, 3, 2, 2, numIn, 0, "+", validateFuncGS)
+	ss := es.EvolveGS(500, 1000, 0.8, 0.5, 3, 0.5, 3, 0.5, 0.01, 0.01, 0.01)
 	fmt.Println("ss score:", ss.Score)
 
-	for _, s := range ss.Genomes {
+	// for _, s := range ss.Genomes {
 
-		fmt.Printf("// (a^4 + a^3 + a^2 + a) solution karva expression for GenomeSet inner Genome:\n// %q \n", s)
-		for _, g := range s.Genes {
-			exp, _ := g.Expression(gr, helpers)
-			fmt.Println(exp)
-		}
+	// 	fmt.Printf("// (a^4 + a^3 + a^2 + a) solution karva expression for GenomeSet inner Genome:\n// %q \n", s)
+	// 	for _, g := range s.Genes {
+	// 		exp, _ := g.Expression(gr, helpers)
+	// 		fmt.Println(exp)
+	// 	}
 
-	}
+	// }
 }

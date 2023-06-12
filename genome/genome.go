@@ -31,6 +31,24 @@ func New(genes []*gene.Gene, linkFunc string) *Genome {
 	return &Genome{Genes: genes, LinkFunc: linkFunc}
 }
 
+// method to check if the two genomes are equal
+func (g *Genome) IfEqual(g2 *Genome) bool {
+	if len(g.Genes) != len(g2.Genes) {
+		return false
+	}
+	for i := 0; i < len(g.Genes); i++ {
+		if !g.Genes[i].IfEqual(g2.Genes[i]) {
+			return false
+		}
+	}
+	// check LinkFunc
+	if g.LinkFunc != g2.LinkFunc {
+		return false
+	}
+
+	return true
+}
+
 func merge(dst *map[string]int, src map[string]int) {
 	for k, v := range src {
 		(*dst)[k] += v

@@ -333,3 +333,36 @@ func (g *Gene) IsTerminal(s string) bool {
 func (g *Gene) IsConstant(s string) bool {
 	return regexp.MustCompile(`^c\d+$`).MatchString(s)
 }
+
+// method to check if the two genes are equal
+func (g *Gene) IfEqual(g2 *Gene) bool {
+	if g == nil || g2 == nil {
+		return false
+	}
+	if len(g.Symbols) != len(g2.Symbols) {
+		return false
+	}
+	for i, v1 := range g.Symbols {
+		if v1 != g2.Symbols[i] {
+			return false
+		}
+	}
+	if len(g.Constants) != len(g2.Constants) {
+		return false
+	}
+	for i, v1 := range g.Constants {
+		if v1 != g2.Constants[i] {
+			return false
+		}
+	}
+	// if g.HeadSize != g2.HeadSize {
+	// 	return false
+	// }
+	// if g.numTerminals != g2.numTerminals {
+	// 	return false
+	// }
+	if g.funcType != g2.funcType {
+		return false
+	}
+	return true
+}

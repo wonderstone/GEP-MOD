@@ -18,10 +18,18 @@ func (g *Genome) EvalMath(in []float64) float64 {
 		log.Printf("Unable to find linking function: %v", g.LinkFunc)
 		return 0.0
 	}
-	result := g.Genes[0].EvalMath(in)
-	for i := 1; i < len(g.Genes); i++ {
-		x := []float64{result, g.Genes[i].EvalMath(in)}
-		result = lf.Float64Function(x)
+	// result := g.Genes[0].EvalMath(in)
+
+	// for i := 1; i < len(g.Genes); i++ {
+	// 	x := []float64{result, g.Genes[i].EvalMath(in)}
+	// 	result = lf.Float64Function(x)
+	// }
+	// bug fixed by wonderstone 2023-06-01
+	x := []float64{}
+	for i := 0; i < len(g.Genes); i++ {
+		x = append(x, g.Genes[i].EvalMath(in))
 	}
+	result := lf.Float64Function(x)
+
 	return result
 }
